@@ -31,6 +31,7 @@ coefficients(lm(Median_house_value ~ Median_household_income, data=penn))
 summary(lm(Median_house_value ~ Median_household_income, data=penn))
 ```
 
+1
 
 Goal: fit a simple linear model, and predict the median house price (y) from median household income (x). Before doing this, 
 let's investigate the census tracts that correspond to Allegheny county (24---425).
