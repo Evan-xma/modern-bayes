@@ -16,7 +16,7 @@ Sequence of values, _not_ necessarily all of the same type
 
 ```{r}
 my.distribution <- list("exponential",7,FALSE)
-my.distribution
+my.distribution[[2]]^2
 ```
 
 Most of what you can do with vectors you can also do with lists
@@ -112,6 +112,7 @@ a.matrix <- matrix(c(35,8,10,4),nrow=2)
 colnames(a.matrix) <- c("v1","v2")
 a.matrix
 a.matrix[,"v1"]  # Try a.matrix$v1 and see what happens
+a.matrix$v1
 ```
 
 

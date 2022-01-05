@@ -24,9 +24,10 @@ Matrices
 In R, a matrix is a specialization of a 2D array
 
 ```{r}
-factory <- matrix(c(40,1,60,3),nrow=2)
+factory <- matrix(c(40,1,60,3),nrow = 2)
 is.array(factory)
 is.matrix(factory)
+factory
 ```
 could also specify `ncol`, and/or `byrow=TRUE` to fill by rows.
 
