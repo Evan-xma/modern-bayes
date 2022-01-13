@@ -12,7 +12,7 @@ In class, you saw the Binomial-Beta model. We will now use this to solve a very 
 Let's start by quickly deriving the Beta-Binomial distribution. 
 
 We assume that 
-$$X\mid \theta \sim \text{Binomial} (\theta)$$,
+$$X\mid \theta \sim \text{Binomial} (\thseta)$$,
 $$\theta \sim \text{Beta}(a,b),$$
 where $a,b$ are assumed to be known parameters. What is the posterior distribution of $\theta \mid X$?
 
@@ -57,12 +57,21 @@ You have a rough sketch of what you should do for this part of the assignment. T
 ### Bernoulli LH Function ###
 # Input: obs.data, theta
 # Output: bernoulli likelihood
+LH.func = function(obs.data,theta){
+  x = sum(obs.data)
+  N = length(obs.data)
+  LH = (theta^x)*(1-theta)^{N-x}
+  return(LH)
+}
 
 
 ### Plot LH for a grid of theta values ###
 # Create the grid #
+theta.sim = seq(0,1,length.out=1000)
 # Store the LH values
+LH.sim = LH.func(obs.data,theta.sim)
 # Create the Plot
+plot(x=theta.sim,y=LH.sim,type='l',main='Likelihood Profile',xlab="Simulated Support of Theta",ylab='Likelihood')
 ```
 
 
@@ -71,8 +80,70 @@ You have a rough sketch of what you should do for this part of the assignment. T
 
 Write a function that takes as its inputs  prior parameters \textsf{a} and \textsf{b} for the Beta-Bernoulli model and the observed data, and produces the posterior parameters you need for the model. \textbf{Generate and print} the posterior parameters for a non-informative prior i.e. \textsf{(a,b) = (1,1)} and for an informative case \textsf{(a,b) = (3,1)}}.
 
+```{r}
+#Function for posterior parameters 
+PostPram.func = function(a,b,obs.data){
+  x = sum(obs.data)
+  N = length(obs.data)
+  Post.a = x + a
+  Post.b = N - x + b
+  ret = list("a" = Post.a, "b" = Post.b)
+  return(ret)
+}
+
+##Generate and Print Posterior Parameters
+#Case 1: non-informative prior 
+Pram.NonInf = PostPram.func(1,1,obs.data)
+Pram.NonInf
+```
+```{r}
+#Case 2: informative prior 
+Pram.Info = PostPram.func(3,1,obs.data)
+Pram.Info
+```
+
 
 
 # Task 5 (To be completed for homework)
 
 Create two plots, one for the informative and one for the non-informative case to show the posterior distribution and superimpose the prior distributions on each along with the likelihood. What do you see? Remember to turn the y-axis ticks off since superimposing may make the scale non-sense.
+
+
+```{r}
+#create support
+p = seq(0,1, length=1000)
+
+##plot Non-Informative Prior and Posterior along with likelihood
+#plot posterior
+plot(p, dbeta(p, Pram.NonInf$a,Pram.NonInf$b),lwd=4, ylab='density', type ='l', col='yellow', main = "Non-Informative Prior", xlab = "theta", yaxt='n')
+par(new=TRUE)
+#plot prior
+plot(p, dbeta(p, 1, 1), col='purple', type = 'l',ylab = "",yaxt='n',xlab="") 
+par(new=TRUE)
+#plot likelihood
+plot(p, LH.sim, col='red', type = 'l', ylab = "",yaxt='n',xlab="") 
+
+
+#add legend
+legend("topright", c( "Posterior","Prior",'Likelihood'),lty=c(1,1,1),col=c("yellow","purple","red"))
+
+```
+
+```{r}
+#create support
+p = seq(0,1, length=1000)
+
+#plot Informative Prior and Posterior along with likelihood
+plot(p, dbeta(p, Pram.Info$a,Pram.Info$b),lwd=4, ylab='density', type ='l', col='yellow', main = "Informative Prior", xlab = "theta", yaxt='n')
+par(new=TRUE)
+#plot prior
+plot(p, dbeta(p, 3, 1), col='purple', type = 'l',ylab = "",yaxt='n',xlab="") 
+par(new=TRUE)
+#plot likelihood
+plot(p, LH.sim, col='red', type = 'l', ylab = "",yaxt='n',xlab="") 
+
+
+#add legend
+legend("topright", c( "Posterior","Prior",'Likelihood'),lty=c(1,1,1),col=c("yellow","purple","red"))
+```
+
